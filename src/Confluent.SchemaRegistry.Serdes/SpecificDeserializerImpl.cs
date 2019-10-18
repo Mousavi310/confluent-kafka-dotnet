@@ -25,7 +25,6 @@ using Avro.Specific;
 using Avro.IO;
 using Avro.Generic;
 using Confluent.Kafka;
-using Confluent.SchemaRegistry;
 
 
 namespace Confluent.SchemaRegistry.Serdes
@@ -117,7 +116,7 @@ namespace Confluent.SchemaRegistry.Serdes
                     var writerId = IPAddress.NetworkToHostOrder(reader.ReadInt32());
 
                     DatumReader<T> datumReader;
-                    await deserializeMutex.WaitAsync();
+                    await deserializeMutex.WaitAsync().ConfigureAwait(continueOnCapturedContext: false);
                     try
                     {
                         datumReaderBySchemaId.TryGetValue(writerId, out datumReader);

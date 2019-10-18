@@ -16,7 +16,7 @@
 
 using Avro.Generic;
 using Confluent.Kafka;
-using Confluent.Kafka.Serdes;
+using Confluent.Kafka.SyncOverAsync;
 using Confluent.SchemaRegistry.Serdes;
 using Confluent.SchemaRegistry;
 using System;
@@ -37,7 +37,7 @@ namespace AvroBlogExample
     {
         async static Task ProduceGeneric(string bootstrapServers, string schemaRegistryUrl)
         {
-            using (var schemaRegistry = new CachedSchemaRegistryClient(new SchemaRegistryConfig { SchemaRegistryUrl = schemaRegistryUrl }))
+            using (var schemaRegistry = new CachedSchemaRegistryClient(new SchemaRegistryConfig { Url = schemaRegistryUrl }))
             using (var producer =
                 new ProducerBuilder<Null, GenericRecord>(new ProducerConfig { BootstrapServers = bootstrapServers })
                     .SetValueSerializer(new AvroSerializer<GenericRecord>(schemaRegistry))
@@ -69,7 +69,7 @@ namespace AvroBlogExample
 
         async static Task ProduceSpecific(string bootstrapServers, string schemaRegistryUrl)
         {
-            using (var schemaRegistry = new CachedSchemaRegistryClient(new SchemaRegistryConfig { SchemaRegistryUrl = schemaRegistryUrl }))
+            using (var schemaRegistry = new CachedSchemaRegistryClient(new SchemaRegistryConfig { Url = schemaRegistryUrl }))
             using (var producer =
                 new ProducerBuilder<Null, MessageTypes.LogMessage>(new ProducerConfig { BootstrapServers = bootstrapServers })
                     .SetValueSerializer(new AvroSerializer<MessageTypes.LogMessage>(schemaRegistry))
@@ -106,10 +106,10 @@ namespace AvroBlogExample
                 AutoOffsetReset = AutoOffsetReset.Earliest
             };
 
-            using (var schemaRegistry = new CachedSchemaRegistryClient( new SchemaRegistryConfig { SchemaRegistryUrl = schemaRegistryUrl }))
+            using (var schemaRegistry = new CachedSchemaRegistryClient(new SchemaRegistryConfig { Url = schemaRegistryUrl }))
             using (var consumer =
                 new ConsumerBuilder<Null, MessageTypes.LogMessage>(consumerConfig)
-                    .SetValueDeserializer(new AvroDeserializer<MessageTypes.LogMessage>(schemaRegistry))
+                    .SetValueDeserializer(new AvroDeserializer<MessageTypes.LogMessage>(schemaRegistry).AsSyncOverAsync())
                     .Build())
             {
                 consumer.Subscribe("log-messages");

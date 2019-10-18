@@ -35,24 +35,23 @@ client. Thanks Andreas!
 
 confluent-kafka-dotnet is distributed via NuGet. We provide three packages:
 
-- [Confluent.Kafka](https://www.nuget.org/packages/Confluent.Kafka/) *[net45, netstandard1.3]* - The core client library.
+- [Confluent.Kafka](https://www.nuget.org/packages/Confluent.Kafka/) *[net45, netstandard1.3, netstandard2.0]* - The core client library.
 - [Confluent.SchemaRegistry.Serdes](https://www.nuget.org/packages/Confluent.SchemaRegistry.Serdes/) *[net452, netstandard2.0]* - Provides a serializer and deserializer for working with Avro serialized data with Confluent Schema Registry integration.
-- [Confluent.SchemaRegistry](https://www.nuget.org/packages/Confluent.SchemaRegistry/) *[net452, netstandard1.4]* - Confluent Schema Registry client (a dependency of Confluent.SchemaRegistry.Serdes).
+- [Confluent.SchemaRegistry](https://www.nuget.org/packages/Confluent.SchemaRegistry/) *[net452, netstandard1.4, netstandard2.0]* - Confluent Schema Registry client (a dependency of Confluent.SchemaRegistry.Serdes).
 
 To install Confluent.Kafka from within Visual Studio, search for Confluent.Kafka in the NuGet Package Manager UI, or run the following command in the Package Manager Console:
 
 ```
-Install-Package Confluent.Kafka -Version 1.0.0-RC2
+Install-Package Confluent.Kafka -Version 1.2.1
 ```
 
 To add a reference to a dotnet core project, execute the following at the command line:
 
 ```
-dotnet add package -v 1.0.0-RC2 Confluent.Kafka
+dotnet add package -v 1.2.1 Confluent.Kafka
 ```
 
-**Note:** We recommend using the `1.0.0-RC2` version of Confluent.Kafka for new projects in preference to the most recent stable release (0.11.6).
-The 1.0 API provides more features, is considerably improved and is more performant than 0.11.x releases.
+Note: `Confluent.Kafka` depends on the `librdkafka.redist` package which provides a number of different builds of `librdkafka` that are compatible with [common platforms](https://github.com/edenhill/librdkafka/wiki/librdkafka.redist-NuGet-package-runtime-libraries). If you are on one of these platforms this will all work seamlessly (and you don't need to explicitly reference `librdkafka.redist`). If you are on a different platform, you may need to [build librdkafka](https://github.com/edenhill/librdkafka#building) manually (or acquire it via other means) and load it using the [Library.Load](https://docs.confluent.io/current/clients/confluent-kafka-dotnet/api/Confluent.Kafka.Library.html#Confluent_Kafka_Library_Load_System_String_) method.
 
 ### Branch builds
 
@@ -110,7 +109,7 @@ Note that a server round-trip is slow (3ms at a minimum; actual latency depends 
 In highly concurrent scenarios you will achieve high overall throughput out of the producer using 
 the above approach, but there will be a delay on each `await` call. In stream processing 
 applications, where you would like to process many messages in rapid succession, you would typically
-make use the `BeginProduce` method instead:
+use the `Produce` method instead:
 
 ```csharp
 using System;
@@ -131,7 +130,7 @@ class Program
         {
             for (int i=0; i<100; ++i)
             {
-                p.BeginProduce("my-topic", new Message<Null, string> { Value = i.ToString() }, handler);
+                p.Produce("my-topic", new Message<Null, string> { Value = i.ToString() }, handler);
             }
 
             // wait for up to 10 seconds for any inflight messages to be delivered.
@@ -234,7 +233,7 @@ this scenario there.
 
 #### Producer
 
-When using `BeginProduce`, to determine whether a particular message has been successfully delivered to a cluster,
+When using `Produce`, to determine whether a particular message has been successfully delivered to a cluster,
 check the `Error` field of the `DeliveryReport` during the delivery handler callback.
 
 When using `ProduceAsync`, any delivery result other than `NoError` will cause the returned `Task` to be in the
@@ -303,4 +302,6 @@ then:
 dotnet test
 ```
 
-Copyright (c) 2016-2017 [Confluent Inc.](https://www.confluent.io), 2015-2016, [Andreas Heider](mailto:andreas@heider.io)
+Copyright (c) 
+2016-2019 [Confluent Inc.](https://www.confluent.io)
+2015-2016 [Andreas Heider](mailto:andreas@heider.io)

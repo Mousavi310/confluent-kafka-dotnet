@@ -132,7 +132,7 @@ namespace Confluent.Kafka
         ///     reflect an error in the application logic of
         ///     the calling application.
         /// </exception>
-        void BeginProduce(
+        void Produce(
             string topic,
             Message<TKey, TValue> message,
             Action<DeliveryReport<TKey, TValue>> deliveryHandler = null);
@@ -172,32 +172,33 @@ namespace Confluent.Kafka
         ///     an error in the application logic of the calling
         ///     application.
         /// </exception>
-        void BeginProduce(
+        void Produce(
             TopicPartition topicPartition,
             Message<TKey, TValue> message,
             Action<DeliveryReport<TKey, TValue>> deliveryHandler = null);
 
         
         /// <summary>
-        ///     Poll for callback events. Typically, you should not 
-        ///     call this method. Only call on producer instances 
-        ///     where background polling has been disabled.
+        ///     Poll for callback events.
         /// </summary>
         /// <param name="timeout">
         ///     The maximum period of time to block if
         ///     no callback events are waiting. You should
-        ///     typically use a relatively short timout period
+        ///     typically use a relatively short timeout period
         ///     because this operation cannot be cancelled.
         /// </param>
         /// <returns>
-        ///     Returns the number of events served.
+        ///     Returns the number of events served since
+        ///     the last call to this method or if this 
+        ///     method has not yet been called, over the
+        ///     lifetime of the producer.
         /// </returns>
         int Poll(TimeSpan timeout);
 
 
         /// <summary>
         ///     Wait until all outstanding produce requests and
-        ///     delievery report callbacks are completed.
+        ///     delivery report callbacks are completed.
         ///    
         ///     [API-SUBJECT-TO-CHANGE] - the semantics and/or
         ///     type of the return value is subject to change.
@@ -205,7 +206,7 @@ namespace Confluent.Kafka
         /// <param name="timeout">
         ///     The maximum length of time to block.
         ///     You should typically use a relatively short
-        ///     timout period and loop until the return value
+        ///     timeout period and loop until the return value
         ///     becomes zero because this operation cannot be
         ///     cancelled. 
         /// </param>
@@ -247,7 +248,7 @@ namespace Confluent.Kafka
         
         /// <summary>
         ///     Wait until all outstanding produce requests and
-        ///     delievery report callbacks are completed.
+        ///     delivery report callbacks are completed.
         /// </summary>
         /// <remarks>
         ///     This method should typically be called prior to

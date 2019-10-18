@@ -1,4 +1,4 @@
-// *** Auto-generated from librdkafka branch v1.0.0-RC7 *** - do not modify manually.
+// *** Auto-generated from librdkafka v1.2.1 *** - do not modify manually.
 //
 // Copyright 2018 Confluent Inc.
 //
@@ -24,69 +24,6 @@ using System.Linq;
 
 namespace Confluent.Kafka
 {
-    /// <summary>
-    ///     BrokerAddressFamily enum values
-    /// </summary>
-    public enum BrokerAddressFamily
-    {
-        /// <summary>
-        ///     Any
-        /// </summary>
-        Any,
-
-        /// <summary>
-        ///     V4
-        /// </summary>
-        V4,
-
-        /// <summary>
-        ///     V6
-        /// </summary>
-        V6
-    }
-
-    /// <summary>
-    ///     SecurityProtocol enum values
-    /// </summary>
-    public enum SecurityProtocol
-    {
-        /// <summary>
-        ///     Plaintext
-        /// </summary>
-        Plaintext,
-
-        /// <summary>
-        ///     Ssl
-        /// </summary>
-        Ssl,
-
-        /// <summary>
-        ///     SaslPlaintext
-        /// </summary>
-        SaslPlaintext,
-
-        /// <summary>
-        ///     SaslSsl
-        /// </summary>
-        SaslSsl
-    }
-
-    /// <summary>
-    ///     PartitionAssignmentStrategy enum values
-    /// </summary>
-    public enum PartitionAssignmentStrategy
-    {
-        /// <summary>
-        ///     Range
-        /// </summary>
-        Range,
-
-        /// <summary>
-        ///     RoundRobin
-        /// </summary>
-        RoundRobin
-    }
-
     /// <summary>
     ///     Partitioner enum values
     /// </summary>
@@ -137,6 +74,132 @@ namespace Confluent.Kafka
         ///     Error
         /// </summary>
         Error
+    }
+
+    /// <summary>
+    ///     BrokerAddressFamily enum values
+    /// </summary>
+    public enum BrokerAddressFamily
+    {
+        /// <summary>
+        ///     Any
+        /// </summary>
+        Any,
+
+        /// <summary>
+        ///     V4
+        /// </summary>
+        V4,
+
+        /// <summary>
+        ///     V6
+        /// </summary>
+        V6
+    }
+
+    /// <summary>
+    ///     SecurityProtocol enum values
+    /// </summary>
+    public enum SecurityProtocol
+    {
+        /// <summary>
+        ///     Plaintext
+        /// </summary>
+        Plaintext,
+
+        /// <summary>
+        ///     Ssl
+        /// </summary>
+        Ssl,
+
+        /// <summary>
+        ///     SaslPlaintext
+        /// </summary>
+        SaslPlaintext,
+
+        /// <summary>
+        ///     SaslSsl
+        /// </summary>
+        SaslSsl
+    }
+
+    /// <summary>
+    ///     SslEndpointIdentificationAlgorithm enum values
+    /// </summary>
+    public enum SslEndpointIdentificationAlgorithm
+    {
+        /// <summary>
+        ///     None
+        /// </summary>
+        None,
+
+        /// <summary>
+        ///     Https
+        /// </summary>
+        Https
+    }
+
+    /// <summary>
+    ///     PartitionAssignmentStrategy enum values
+    /// </summary>
+    public enum PartitionAssignmentStrategy
+    {
+        /// <summary>
+        ///     Range
+        /// </summary>
+        Range,
+
+        /// <summary>
+        ///     RoundRobin
+        /// </summary>
+        RoundRobin
+    }
+
+    /// <summary>
+    ///     IsolationLevel enum values
+    /// </summary>
+    public enum IsolationLevel
+    {
+        /// <summary>
+        ///     ReadUncommitted
+        /// </summary>
+        ReadUncommitted,
+
+        /// <summary>
+        ///     ReadCommitted
+        /// </summary>
+        ReadCommitted
+    }
+
+    /// <summary>
+    ///     CompressionType enum values
+    /// </summary>
+    public enum CompressionType
+    {
+        /// <summary>
+        ///     None
+        /// </summary>
+        None,
+
+        /// <summary>
+        ///     Gzip
+        /// </summary>
+        Gzip,
+
+        /// <summary>
+        ///     Snappy
+        /// </summary>
+        Snappy,
+
+        /// <summary>
+        ///     Lz4
+        /// </summary>
+        Lz4,
+
+        /// <summary>
+        ///     Zstd
+        /// </summary>
+        Zstd
     }
 
     /// <summary>
@@ -191,6 +254,25 @@ namespace Confluent.Kafka
     /// </summary>
     public class ClientConfig : Config
     {
+
+        /// <summary>
+        ///     Initialize a new empty <see cref="ClientConfig" /> instance.
+        /// </summary>
+        public ClientConfig() : base() { }
+
+        /// <summary>
+        ///     Initialize a new <see cref="ClientConfig" /> instance wrapping
+        ///     an existing <see cref="ClientConfig" /> instance.
+        ///     This will change the values "in-place" i.e. operations on this class WILL modify the provided collection
+        /// </summary>
+        public ClientConfig(ClientConfig config) : base(config) { }
+
+        /// <summary>
+        ///     Initialize a new <see cref="ClientConfig" /> instance wrapping
+        ///     an existing key/value pair collection.
+        ///     This will change the values "in-place" i.e. operations on this class WILL modify the provided collection
+        /// </summary>
+        public ClientConfig(IDictionary<string, string> config) : base(config) { }
 
         /// <summary>
         ///     SASL mechanism to use for authentication. Supported: GSSAPI, PLAIN, SCRAM-SHA-256, SCRAM-SHA-512. **NOTE**: Despite the name, you may not configure more than one mechanism.
@@ -305,7 +387,7 @@ namespace Confluent.Kafka
         public int? MetadataRequestTimeoutMs { get { return GetInt("metadata.request.timeout.ms"); } set { this.SetObject("metadata.request.timeout.ms", value); } }
 
         /// <summary>
-        ///     Topic metadata refresh interval in milliseconds. The metadata is automatically refreshed on error and connect. Use -1 to disable the intervalled refresh.
+        ///     Period of time in milliseconds at which topic and broker metadata is refreshed in order to proactively discover any new brokers, topics, partitions or partition leader changes. Use -1 to disable the intervalled refresh (not recommended). If there are no locally referenced topics (no topic objects created, no messages produced, no subscription or no assignment) then only the broker list will be refreshed every interval but no more often than every 10s.
         ///
         ///     default: 300000
         ///     importance: low
@@ -415,14 +497,6 @@ namespace Confluent.Kafka
         ///     importance: low
         /// </summary>
         public BrokerAddressFamily? BrokerAddressFamily { get { return (BrokerAddressFamily?)GetEnum(typeof(BrokerAddressFamily), "broker.address.family"); } set { this.SetObject("broker.address.family", value); } }
-
-        /// <summary>
-        ///     When enabled the client will only connect to brokers it needs to communicate with. When disabled the client will maintain connections to all brokers in the cluster.
-        ///
-        ///     default: true
-        ///     importance: medium
-        /// </summary>
-        public bool? EnableSparseConnections { get { return GetBool("enable.sparse.connections"); } set { this.SetObject("enable.sparse.connections", value); } }
 
         /// <summary>
         ///     The initial time to wait before reconnecting to a broker after the connection has been closed. The time is increased exponentially until `reconnect.backoff.max.ms` is reached. -25% to +50% jitter is applied to each reconnect backoff. A value of 0 disables the backoff and reconnects immediately.
@@ -553,12 +627,20 @@ namespace Confluent.Kafka
         public string SslKeyLocation { get { return Get("ssl.key.location"); } set { this.SetObject("ssl.key.location", value); } }
 
         /// <summary>
-        ///     Private key passphrase
+        ///     Private key passphrase (for use with `ssl.key.location` and `set_ssl_cert()`)
         ///
         ///     default: ''
         ///     importance: low
         /// </summary>
         public string SslKeyPassword { get { return Get("ssl.key.password"); } set { this.SetObject("ssl.key.password", value); } }
+
+        /// <summary>
+        ///     Client's private key string (PEM format) used for authentication.
+        ///
+        ///     default: ''
+        ///     importance: low
+        /// </summary>
+        public string SslKeyPem { get { return Get("ssl.key.pem"); } set { this.SetObject("ssl.key.pem", value); } }
 
         /// <summary>
         ///     Path to client's public key (PEM) used for authentication.
@@ -569,10 +651,18 @@ namespace Confluent.Kafka
         public string SslCertificateLocation { get { return Get("ssl.certificate.location"); } set { this.SetObject("ssl.certificate.location", value); } }
 
         /// <summary>
+        ///     Client's public key string (PEM format) used for authentication.
+        ///
+        ///     default: ''
+        ///     importance: low
+        /// </summary>
+        public string SslCertificatePem { get { return Get("ssl.certificate.pem"); } set { this.SetObject("ssl.certificate.pem", value); } }
+
+        /// <summary>
         ///     File or directory path to CA certificate(s) for verifying the broker's key.
         ///
         ///     default: ''
-        ///     importance: medium
+        ///     importance: low
         /// </summary>
         public string SslCaLocation { get { return Get("ssl.ca.location"); } set { this.SetObject("ssl.ca.location", value); } }
 
@@ -601,6 +691,22 @@ namespace Confluent.Kafka
         public string SslKeystorePassword { get { return Get("ssl.keystore.password"); } set { this.SetObject("ssl.keystore.password", value); } }
 
         /// <summary>
+        ///     Enable OpenSSL's builtin broker (server) certificate verification. This verification can be extended by the application by implementing a certificate_verify_cb.
+        ///
+        ///     default: true
+        ///     importance: low
+        /// </summary>
+        public bool? EnableSslCertificateVerification { get { return GetBool("enable.ssl.certificate.verification"); } set { this.SetObject("enable.ssl.certificate.verification", value); } }
+
+        /// <summary>
+        ///     Endpoint identification algorithm to validate broker hostname using broker certificate. https - Server (broker) hostname verification as specified in RFC2818. none - No endpoint verification. OpenSSL >= 1.0.2 required.
+        ///
+        ///     default: none
+        ///     importance: low
+        /// </summary>
+        public SslEndpointIdentificationAlgorithm? SslEndpointIdentificationAlgorithm { get { return (SslEndpointIdentificationAlgorithm?)GetEnum(typeof(SslEndpointIdentificationAlgorithm), "ssl.endpoint.identification.algorithm"); } set { this.SetObject("ssl.endpoint.identification.algorithm", value); } }
+
+        /// <summary>
         ///     Kerberos principal name that Kafka runs as, not including /hostname@REALM
         ///
         ///     default: kafka
@@ -617,15 +723,15 @@ namespace Confluent.Kafka
         public string SaslKerberosPrincipal { get { return Get("sasl.kerberos.principal"); } set { this.SetObject("sasl.kerberos.principal", value); } }
 
         /// <summary>
-        ///     Full kerberos kinit command string, %{config.prop.name} is replaced by corresponding config object value, %{broker.name} returns the broker's hostname.
+        ///     Shell command to refresh or acquire the client's Kerberos ticket. This command is executed on client creation and every sasl.kerberos.min.time.before.relogin (0=disable). %{config.prop.name} is replaced by corresponding config object value.
         ///
-        ///     default: kinit -S "%{sasl.kerberos.service.name}/%{broker.name}" -k -t "%{sasl.kerberos.keytab}" %{sasl.kerberos.principal}
+        ///     default: kinit -R -t "%{sasl.kerberos.keytab}" -k %{sasl.kerberos.principal} || kinit -t "%{sasl.kerberos.keytab}" -k %{sasl.kerberos.principal}
         ///     importance: low
         /// </summary>
         public string SaslKerberosKinitCmd { get { return Get("sasl.kerberos.kinit.cmd"); } set { this.SetObject("sasl.kerberos.kinit.cmd", value); } }
 
         /// <summary>
-        ///     Path to Kerberos keytab file. Uses system default if not set.**NOTE**: This is not automatically used but must be added to the template in sasl.kerberos.kinit.cmd as ` ... -t %{sasl.kerberos.keytab}`.
+        ///     Path to Kerberos keytab file. This configuration property is only used as a variable in `sasl.kerberos.kinit.cmd` as ` ... -t "%{sasl.kerberos.keytab}"`.
         ///
         ///     default: ''
         ///     importance: low
@@ -633,7 +739,7 @@ namespace Confluent.Kafka
         public string SaslKerberosKeytab { get { return Get("sasl.kerberos.keytab"); } set { this.SetObject("sasl.kerberos.keytab", value); } }
 
         /// <summary>
-        ///     Minimum time in milliseconds between key refresh attempts.
+        ///     Minimum time in milliseconds between key refresh attempts. Disable automatic key refresh by setting this property to 0.
         ///
         ///     default: 60000
         ///     importance: low
@@ -657,6 +763,22 @@ namespace Confluent.Kafka
         public string SaslPassword { get { return Get("sasl.password"); } set { this.SetObject("sasl.password", value); } }
 
         /// <summary>
+        ///     SASL/OAUTHBEARER configuration. The format is implementation-dependent and must be parsed accordingly. The default unsecured token implementation (see https://tools.ietf.org/html/rfc7515#appendix-A.5) recognizes space-separated name=value pairs with valid names including principalClaimName, principal, scopeClaimName, scope, and lifeSeconds. The default value for principalClaimName is "sub", the default value for scopeClaimName is "scope", and the default value for lifeSeconds is 3600. The scope value is CSV format with the default value being no/empty scope. For example: `principalClaimName=azp principal=admin scopeClaimName=roles scope=role1,role2 lifeSeconds=600`. In addition, SASL extensions can be communicated to the broker via `extension_<extensionname>=value`. For example: `principal=admin extension_traceId=123`
+        ///
+        ///     default: ''
+        ///     importance: low
+        /// </summary>
+        public string SaslOauthbearerConfig { get { return Get("sasl.oauthbearer.config"); } set { this.SetObject("sasl.oauthbearer.config", value); } }
+
+        /// <summary>
+        ///     Enable the builtin unsecure JWT OAUTHBEARER token handler if no oauthbearer_refresh_cb has been set. This builtin handler should only be used for development or testing, and not in production.
+        ///
+        ///     default: false
+        ///     importance: low
+        /// </summary>
+        public bool? EnableSaslOauthbearerUnsecureJwt { get { return GetBool("enable.sasl.oauthbearer.unsecure.jwt"); } set { this.SetObject("enable.sasl.oauthbearer.unsecure.jwt", value); } }
+
+        /// <summary>
         ///     List of plugin libraries to load (; separated). The library search path is platform dependent (see dlopen(3) for Unix and LoadLibrary() for Windows). If no filename extension is specified the platform-specific extension (such as .dll or .so) will be appended automatically.
         ///
         ///     default: ''
@@ -672,22 +794,25 @@ namespace Confluent.Kafka
     /// </summary>
     public class AdminClientConfig : ClientConfig
     {
+
         /// <summary>
         ///     Initialize a new empty <see cref="AdminClientConfig" /> instance.
         /// </summary>
-        public AdminClientConfig() {}
+        public AdminClientConfig() : base() { }
 
         /// <summary>
-        ///     Initialize a new <see cref="AdminClientConfig" /> instance based on
+        ///     Initialize a new <see cref="AdminClientConfig" /> instance wrapping
         ///     an existing <see cref="ClientConfig" /> instance.
+        ///     This will change the values "in-place" i.e. operations on this class WILL modify the provided collection
         /// </summary>
-        public AdminClientConfig(ClientConfig config) { this.properties = new Dictionary<string, string>(config.ToDictionary(a => a.Key, a => a.Value)); }
+        public AdminClientConfig(ClientConfig config) : base(config) { }
 
         /// <summary>
-        ///     Initialize a new <see cref="AdminClientConfig" /> instance based on
+        ///     Initialize a new <see cref="AdminClientConfig" /> instance wrapping
         ///     an existing key/value pair collection.
+        ///     This will change the values "in-place" i.e. operations on this class WILL modify the provided collection
         /// </summary>
-        public AdminClientConfig(IEnumerable<KeyValuePair<string, string>> config) { this.properties = new Dictionary<string, string>(config.ToDictionary(a => a.Key, a => a.Value)); }
+        public AdminClientConfig(IDictionary<string, string> config) : base(config) { }
     }
 
 
@@ -696,29 +821,32 @@ namespace Confluent.Kafka
     /// </summary>
     public class ProducerConfig : ClientConfig
     {
+
         /// <summary>
         ///     Initialize a new empty <see cref="ProducerConfig" /> instance.
         /// </summary>
-        public ProducerConfig() {}
+        public ProducerConfig() : base() { }
 
         /// <summary>
-        ///     Initialize a new <see cref="ProducerConfig" /> instance based on
+        ///     Initialize a new <see cref="ProducerConfig" /> instance wrapping
         ///     an existing <see cref="ClientConfig" /> instance.
+        ///     This will change the values "in-place" i.e. operations on this class WILL modify the provided collection
         /// </summary>
-        public ProducerConfig(ClientConfig config) { this.properties = new Dictionary<string, string>(config.ToDictionary(a => a.Key, a => a.Value)); }
+        public ProducerConfig(ClientConfig config) : base(config) { }
 
         /// <summary>
-        ///     Initialize a new <see cref="ProducerConfig" /> instance based on
+        ///     Initialize a new <see cref="ProducerConfig" /> instance wrapping
         ///     an existing key/value pair collection.
+        ///     This will change the values "in-place" i.e. operations on this class WILL modify the provided collection
         /// </summary>
-        public ProducerConfig(IEnumerable<KeyValuePair<string, string>> config) { this.properties = new Dictionary<string, string>(config.ToDictionary(a => a.Key, a => a.Value)); }
+        public ProducerConfig(IDictionary<string, string> config) : base(config) { }
 
         /// <summary>
-        ///     Specifies whether or not the producer should start a background poll 
+        ///     Specifies whether or not the producer should start a background poll
         ///     thread to receive delivery reports and event notifications. Generally,
-        ///     this should be set to true. If set to false, you will need to call 
+        ///     this should be set to true. If set to false, you will need to call
         ///     the Poll function manually.
-        /// 
+        ///
         ///     default: true
         ///     importance: low
         /// </summary>
@@ -728,7 +856,7 @@ namespace Confluent.Kafka
         ///     Specifies whether to enable notification of delivery reports. Typically
         ///     you should set this parameter to true. Set it to false for "fire and
         ///     forget" semantics and a small boost in performance.
-        /// 
+        ///
         ///     default: true
         ///     importance: low
         /// </summary>
@@ -739,11 +867,43 @@ namespace Confluent.Kafka
         ///     reports. Disabling delivery report fields that you do not require will
         ///     improve maximum throughput and reduce memory usage. Allowed values:
         ///     key, value, timestamp, headers, all, none.
-        /// 
+        ///
         ///     default: all
         ///     importance: low
         /// </summary>
         public string DeliveryReportFields { get { return Get("dotnet.producer.delivery.report.fields"); } set { this.SetObject("dotnet.producer.delivery.report.fields", value.ToString()); } }
+
+        /// <summary>
+        ///     The ack timeout of the producer request in milliseconds. This value is only enforced by the broker and relies on `request.required.acks` being != 0.
+        ///
+        ///     default: 5000
+        ///     importance: medium
+        /// </summary>
+        public int? RequestTimeoutMs { get { return GetInt("request.timeout.ms"); } set { this.SetObject("request.timeout.ms", value); } }
+
+        /// <summary>
+        ///     Local message timeout. This value is only enforced locally and limits the time a produced message waits for successful delivery. A time of 0 is infinite. This is the maximum time librdkafka may use to deliver a message (including retries). Delivery error occurs when either the retry count or the message timeout are exceeded.
+        ///
+        ///     default: 300000
+        ///     importance: high
+        /// </summary>
+        public int? MessageTimeoutMs { get { return GetInt("message.timeout.ms"); } set { this.SetObject("message.timeout.ms", value); } }
+
+        /// <summary>
+        ///     Partitioner: `random` - random distribution, `consistent` - CRC32 hash of key (Empty and NULL keys are mapped to single partition), `consistent_random` - CRC32 hash of key (Empty and NULL keys are randomly partitioned), `murmur2` - Java Producer compatible Murmur2 hash of key (NULL keys are mapped to single partition), `murmur2_random` - Java Producer compatible Murmur2 hash of key (NULL keys are randomly partitioned. This is functionally equivalent to the default partitioner in the Java Producer.).
+        ///
+        ///     default: consistent_random
+        ///     importance: high
+        /// </summary>
+        public Partitioner? Partitioner { get { return (Partitioner?)GetEnum(typeof(Partitioner), "partitioner"); } set { this.SetObject("partitioner", value); } }
+
+        /// <summary>
+        ///     Compression level parameter for algorithm selected by configuration property `compression.codec`. Higher values will result in better compression at the cost of more CPU usage. Usable range is algorithm-dependent: [0-9] for gzip; [0-12] for lz4; only 0 for snappy; -1 = codec-dependent default compression level.
+        ///
+        ///     default: -1
+        ///     importance: medium
+        /// </summary>
+        public int? CompressionLevel { get { return GetInt("compression.level"); } set { this.SetObject("compression.level", value); } }
 
         /// <summary>
         ///     When set to `true`, the producer will ensure that messages are successfully produced exactly once and in the original produce order. The following configuration properties are adjusted automatically (if not modified by the user) when idempotence is enabled: `max.in.flight.requests.per.connection=5` (must be less than or equal to 5), `retries=INT32_MAX` (must be greater than 0), `acks=all`, `queuing.strategy=fifo`. Producer instantation will fail if user-supplied configuration is incompatible.
@@ -780,10 +940,10 @@ namespace Confluent.Kafka
         /// <summary>
         ///     Delay in milliseconds to wait for messages in the producer queue to accumulate before constructing message batches (MessageSets) to transmit to brokers. A higher value allows larger and more effective (less overhead, improved compression) batches of messages to accumulate at the expense of increased message delivery latency.
         ///
-        ///     default: 0
+        ///     default: 0.5
         ///     importance: high
         /// </summary>
-        public int? LingerMs { get { return GetInt("linger.ms"); } set { this.SetObject("linger.ms", value); } }
+        public double? LingerMs { get { return GetDouble("linger.ms"); } set { this.SetObject("linger.ms", value); } }
 
         /// <summary>
         ///     How many times to retry sending a failing Message. **Note:** retrying may cause reordering unless `enable.idempotence` is set to true.
@@ -810,44 +970,20 @@ namespace Confluent.Kafka
         public int? QueueBufferingBackpressureThreshold { get { return GetInt("queue.buffering.backpressure.threshold"); } set { this.SetObject("queue.buffering.backpressure.threshold", value); } }
 
         /// <summary>
+        ///     compression codec to use for compressing message sets. This is the default value for all topics, may be overridden by the topic configuration property `compression.codec`.
+        ///
+        ///     default: none
+        ///     importance: medium
+        /// </summary>
+        public CompressionType? CompressionType { get { return (CompressionType?)GetEnum(typeof(CompressionType), "compression.type"); } set { this.SetObject("compression.type", value); } }
+
+        /// <summary>
         ///     Maximum number of messages batched in one MessageSet. The total MessageSet size is also limited by message.max.bytes.
         ///
         ///     default: 10000
         ///     importance: medium
         /// </summary>
         public int? BatchNumMessages { get { return GetInt("batch.num.messages"); } set { this.SetObject("batch.num.messages", value); } }
-
-        /// <summary>
-        ///     The ack timeout of the producer request in milliseconds. This value is only enforced by the broker and relies on `request.required.acks` being != 0.
-        ///
-        ///     default: 5000
-        ///     importance: medium
-        /// </summary>
-        public int? RequestTimeoutMs { get { return GetInt("request.timeout.ms"); } set { this.SetObject("request.timeout.ms", value); } }
-
-        /// <summary>
-        ///     Local message timeout. This value is only enforced locally and limits the time a produced message waits for successful delivery. A time of 0 is infinite. This is the maximum time librdkafka may use to deliver a message (including retries). Delivery error occurs when either the retry count or the message timeout are exceeded.
-        ///
-        ///     default: 300000
-        ///     importance: high
-        /// </summary>
-        public int? MessageTimeoutMs { get { return GetInt("message.timeout.ms"); } set { this.SetObject("message.timeout.ms", value); } }
-
-        /// <summary>
-        ///     Partitioner: `random` - random distribution, `consistent` - CRC32 hash of key (Empty and NULL keys are mapped to single partition), `consistent_random` - CRC32 hash of key (Empty and NULL keys are randomly partitioned), `murmur2` - Java Producer compatible Murmur2 hash of key (NULL keys are mapped to single partition), `murmur2_random` - Java Producer compatible Murmur2 hash of key (NULL keys are randomly partitioned. This is functionally equivalent to the default partitioner in the Java Producer.).
-        ///
-        ///     default: consistent_random
-        ///     importance: high
-        /// </summary>
-        public Partitioner? Partitioner { get { return (Partitioner?)GetEnum(typeof(Partitioner), "partitioner"); } set { this.SetObject("partitioner", value); } }
-
-        /// <summary>
-        ///     Compression level parameter for algorithm selected by configuration property `compression.codec`. Higher values will result in better compression at the cost of more CPU usage. Usable range is algorithm-dependent: [0-9] for gzip; [0-12] for lz4; only 0 for snappy; -1 = codec-dependent default compression level.
-        ///
-        ///     default: -1
-        ///     importance: medium
-        /// </summary>
-        public int? CompressionLevel { get { return GetInt("compression.level"); } set { this.SetObject("compression.level", value); } }
 
     }
 
@@ -857,36 +993,47 @@ namespace Confluent.Kafka
     /// </summary>
     public class ConsumerConfig : ClientConfig
     {
+
         /// <summary>
         ///     Initialize a new empty <see cref="ConsumerConfig" /> instance.
         /// </summary>
-        public ConsumerConfig() {}
+        public ConsumerConfig() : base() { }
 
         /// <summary>
-        ///     Initialize a new <see cref="ConsumerConfig" /> instance based on
+        ///     Initialize a new <see cref="ConsumerConfig" /> instance wrapping
         ///     an existing <see cref="ClientConfig" /> instance.
+        ///     This will change the values "in-place" i.e. operations on this class WILL modify the provided collection
         /// </summary>
-        public ConsumerConfig(ClientConfig config) { this.properties = new Dictionary<string, string>(config.ToDictionary(a => a.Key, a => a.Value)); }
+        public ConsumerConfig(ClientConfig config) : base(config) { }
 
         /// <summary>
-        ///     Initialize a new <see cref="ConsumerConfig" /> instance based on
+        ///     Initialize a new <see cref="ConsumerConfig" /> instance wrapping
         ///     an existing key/value pair collection.
+        ///     This will change the values "in-place" i.e. operations on this class WILL modify the provided collection
         /// </summary>
-        public ConsumerConfig(IEnumerable<KeyValuePair<string, string>> config) { this.properties = new Dictionary<string, string>(config.ToDictionary(a => a.Key, a => a.Value)); }
+        public ConsumerConfig(IDictionary<string, string> config) : base(config) { }
 
         /// <summary>
         ///     A comma separated list of fields that may be optionally set
         ///     in <see cref="Confluent.Kafka.ConsumeResult{TKey,TValue}" />
         ///     objects returned by the
         ///     <see cref="Confluent.Kafka.Consumer{TKey,TValue}.Consume(System.TimeSpan)" />
-        ///     method. Disabling fields that you do not require will improve 
+        ///     method. Disabling fields that you do not require will improve
         ///     throughput and reduce memory consumption. Allowed values:
         ///     headers, timestamp, topic, all, none
-        /// 
+        ///
         ///     default: all
         ///     importance: low
         /// </summary>
         public string ConsumeResultFields { set { this.SetObject("dotnet.consumer.consume.result.fields", value); } }
+
+        /// <summary>
+        ///     Action to take when there is no initial offset in offset store or the desired offset is out of range: 'smallest','earliest' - automatically reset the offset to the smallest offset, 'largest','latest' - automatically reset the offset to the largest offset, 'error' - trigger an error which is retrieved by consuming messages and checking 'message->err'.
+        ///
+        ///     default: largest
+        ///     importance: high
+        /// </summary>
+        public AutoOffsetReset? AutoOffsetReset { get { return (AutoOffsetReset?)GetEnum(typeof(AutoOffsetReset), "auto.offset.reset"); } set { this.SetObject("auto.offset.reset", value); } }
 
         /// <summary>
         ///     Client group id string. All clients sharing the same group.id belong to the same group.
@@ -1025,6 +1172,14 @@ namespace Confluent.Kafka
         public int? FetchErrorBackoffMs { get { return GetInt("fetch.error.backoff.ms"); } set { this.SetObject("fetch.error.backoff.ms", value); } }
 
         /// <summary>
+        ///     Controls how to read messages written transactionally: `read_committed` - only return transactional messages which have been committed. `read_uncommitted` - return all messages, even transactional messages which have been aborted.
+        ///
+        ///     default: read_committed
+        ///     importance: high
+        /// </summary>
+        public IsolationLevel? IsolationLevel { get { return (IsolationLevel?)GetEnum(typeof(IsolationLevel), "isolation.level"); } set { this.SetObject("isolation.level", value); } }
+
+        /// <summary>
         ///     Emit RD_KAFKA_RESP_ERR__PARTITION_EOF event whenever the consumer reaches the end of a partition.
         ///
         ///     default: false
@@ -1039,14 +1194,6 @@ namespace Confluent.Kafka
         ///     importance: medium
         /// </summary>
         public bool? CheckCrcs { get { return GetBool("check.crcs"); } set { this.SetObject("check.crcs", value); } }
-
-        /// <summary>
-        ///     Action to take when there is no initial offset in offset store or the desired offset is out of range: 'smallest','earliest' - automatically reset the offset to the smallest offset, 'largest','latest' - automatically reset the offset to the largest offset, 'error' - trigger an error which is retrieved by consuming messages and checking 'message->err'.
-        ///
-        ///     default: largest
-        ///     importance: high
-        /// </summary>
-        public AutoOffsetReset? AutoOffsetReset { get { return (AutoOffsetReset?)GetEnum(typeof(AutoOffsetReset), "auto.offset.reset"); } set { this.SetObject("auto.offset.reset", value); } }
 
     }
 

@@ -101,7 +101,7 @@ namespace Confluent.SchemaRegistry
         ///     The subject to get the latest associated schema for.
         /// </param>
         /// <returns>
-        ///     The latest schema registred against <paramref name="subject" />.
+        ///     The latest schema registered against <paramref name="subject" />.
         /// </returns>
         Task<Schema> GetLatestSchemaAsync(string subject);
 
@@ -150,10 +150,14 @@ namespace Confluent.SchemaRegistry
         /// <param name="topic">
         ///     The topic name.
         /// </param>
+        /// <param name="recordType">
+        ///     The fully qualified Avro record type or null if the key is not
+        ///     an Avro record type.
+        /// </param>
         /// <returns>
         ///     The key subject name given a topic name.
         /// </returns>
-        string ConstructKeySubjectName(string topic);
+        string ConstructKeySubjectName(string topic, string recordType = null);
 
 
         /// <summary>
@@ -162,9 +166,13 @@ namespace Confluent.SchemaRegistry
         /// <param name="topic">
         ///     The topic name.
         /// </param>
+        /// <param name="recordType">
+        ///     The fully qualified Avro record type or null if the value is not
+        ///     an Avro record type.
+        /// </param>
         /// <returns>
         ///     The value subject name given a topic name.
         /// </returns>
-        string ConstructValueSubjectName(string topic);
+        string ConstructValueSubjectName(string topic, string recordType = null);
     }
 }

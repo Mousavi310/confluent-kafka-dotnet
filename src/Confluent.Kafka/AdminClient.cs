@@ -30,7 +30,7 @@ namespace Confluent.Kafka
     /// <summary>
     ///     Implements an Apache Kafka admin client.
     /// </summary>
-    public class AdminClient : IAdminClient
+    internal class AdminClient : IAdminClient
     {
         private int cancellationDelayMaxMs;
 
@@ -145,7 +145,7 @@ namespace Confluent.Kafka
                                 if (adminClientResult.GetType() != expectedType)
                                 {
                                     // Should never happen.
-                                    throw new InvalidOperationException($"Completion source type mismatch. Exected {expectedType.Name}, got {type}");
+                                    throw new InvalidOperationException($"Completion source type mismatch. Expected {expectedType.Name}, got {type}");
                                 }
 
                                 var errorCode = Librdkafka.event_error(eventPtr);
@@ -425,7 +425,7 @@ namespace Confluent.Kafka
         ///     make broker requests. It is valid to provide either a Consumer, Producer
         ///     or AdminClient handle.
         /// </param>
-        public AdminClient(Handle handle)
+        internal AdminClient(Handle handle)
         {                            
             this.ownedClient = null;
             this.handle = handle;

@@ -24,7 +24,6 @@ using System.Threading.Tasks;
 using Avro.IO;
 using Avro.Specific;
 using Confluent.Kafka;
-using Confluent.SchemaRegistry;
 
 
 namespace Confluent.SchemaRegistry.Serdes
@@ -40,7 +39,7 @@ namespace Confluent.SchemaRegistry.Serdes
         private int? writerSchemaId;
 
         private SpecificWriter<T> avroWriter;
-       
+
         private HashSet<string> subjectsRegistered = new HashSet<string>();
 
         private SemaphoreSlim serializeMutex = new SemaphoreSlim(1);
@@ -113,12 +112,18 @@ namespace Confluent.SchemaRegistry.Serdes
         {
             try
             {
-                await serializeMutex.WaitAsync();
+                await serializeMutex.WaitAsync().ConfigureAwait(continueOnCapturedContext: false);
                 try
                 {
+                    string fullname = null;
+                    if (data is ISpecificRecord && ((ISpecificRecord)data).Schema is Avro.RecordSchema)
+                    {
+                        fullname = ((Avro.RecordSchema)((ISpecificRecord)data).Schema).Fullname;
+                    }
+
                     string subject = isKey
-                        ? schemaRegistryClient.ConstructKeySubjectName(topic)
-                        : schemaRegistryClient.ConstructValueSubjectName(topic);
+                        ? schemaRegistryClient.ConstructKeySubjectName(topic, fullname)
+                        : schemaRegistryClient.ConstructValueSubjectName(topic, fullname);
 
                     if (!subjectsRegistered.Contains(subject))
                     {

@@ -1,3 +1,147 @@
+# 1.2.1
+
+## Fixes
+
+- References librdkafka v1.2.1 which resolves an issue that broke GSSAPI authentication on Windows.
+
+
+# 1.2.0
+
+## Bugs
+
+  **WARNING: There is an issue with SASL GSSAPI authentication on Windows with this release. This is resolved in v1.2.1.**
+	
+## Enhancements
+
+- References librdkafka v1.2.0. Refer to the [release notes](https://github.com/edenhill/librdkafka/releases/tag/v1.2.0) for more information. Headline feature is consumer side support for transactions.
+- Added `IDictionary` overload to `Config` constructors (contribution by @AndyPook).
+- `Confluent.Kafka`, `Confluent.SchemaRegistry` and `Confluent.SchemaRegistry.Serdes` are now all signed, and `Confluent.Kafka.StrongName` deprecated.
+
+## Fixes
+
+- Updated the librdkafka build load order so that the most featureful version is used on any given platform.
+
+
+# 1.1.0
+
+## Enhancements
+
+- References librdkafka v1.1.0. Refer to the [release notes](https://github.com/edenhill/librdkafka/releases/tag/v1.1.0) for more informtion. Notable improvement for Windows SSL users: You no longer need to specify a CA certificate file/directory (SslCaLocation) - librdkafka will load the CA certs by default from the Windows Root Certificate Store.
+
+
+# 1.0.1.1
+
+## Changes
+
+- Applied `ConfigureAwait(false)` to all internal `await`ed calls, which resolves deadlock issues in
+synchronization contexts with limited numbers of threads [#967](https://github.com/confluentinc/confluent-kafka-dotnet/pull/967).
+
+
+# 1.0.1
+
+## Enhancements
+
+- Support for Alpine Linux.
+- New LogLevelType enum and functions to convert between different log level type levels.
+- Added netstandard20 as a target.
+- References librdkafka [1.0.1](https://github.com/edenhill/librdkafka/releases/tag/v1.0.1).
+
+
+# 1.0.0
+
+## Summary
+
+1.0.0 is a major update of the API, introducing many new features and enhancements.
+Note: The 1.0 API is not compatible with earlier versions of the library.
+
+Feature highlights:
+
+- Inherits all of the new features in librdkafka [v1.0.0](https://github.com/edenhill/librdkafka/releases/tag/v1.0.0)
+- General improvements to client classes:
+  - Strongly typed configuration.
+  - Construction is via builder classes:
+    - Allows/enforces that event handlers are specified at construction time.
+    - More extensible.
+  - Header support.
+  - New Message class abstraction and related changes.
+  - Consistency in error reporting across library (via exceptions).
+  - Support for fatal errors.
+- Added AdminClient:
+  - CreateTopics, DeleteTopics, CreatePartitions, AlterConfigs, and DescribeConfigs methods.
+  - Moved ListGroups and GetMetadata methods from the Producer and Consumer classes to AdminClient.
+- Producer specific improvements:
+  - New serialization interface:
+    - Non-blocking support for async serializers.
+    - Very flexible:
+      - e.g. can be easily extended to support header serialization.
+  - Capability to specify custom timestamps when producing messages. 
+  - Message persistence status support.
+  - Renamed ProduceAsync variants with a callback to Produce.
+- Consumer improvements:
+  - A new rebalance API.
+  - New deserialization API analogous to the new serialization API.
+  - PartitionEOF notification is via ConsumeResult, not events.
+    - EOF notification is now disabled by default. To enable, set the EnablePartitionEof config property to true.
+- Confluent Schema Registry integration
+  - Added support for basic authentication.
+  - Added GET subject versions to the cached schema registry client.
+  - Renamed Confluent.Kafka.Avro to Confluent.SchemaRegistry.Serdes in preparation for support for additional serialization formats.
+
+
+# 1.0.0-RC7
+
+## Changes
+
+- Moved SyncOverAsync functionality to the Confluent.Kafka.SyncOverAsync namespace.
+- Marked DependentProducerBuilder as API-SUBJECT-TO-CHANGE.
+- No-op handlers are no longer registered with librdkafka if corresponding handlers are not specified in client builder classes.
+- Renamed AsyncAvroSerializer to AvroSerializer and AsyncAvroDeserializer to AvroDeserializer
+
+
+# 1.0.0-RC6
+
+## New Features
+
+- Added DependentAdminClientBuilder class.
+
+
+## Changes
+
+- Reverted RC4 changes.
+- Renamed AvroSerializer to AsyncAvroSerializer and AvroDeserializer to AsyncAvroDeserializer
+- Added SyncOverAsyncSerializer and SyncOverAsyncDeserializer adapter classes.
+- Added AsSyncOverAsync factory method to AsyncAvroSerializer and AsyncAvroDeserializer.
+- Removed IAsyncDeserializer setter overloads from the ConsumerBuilder class.
+- Renamed Producer.BeginProduce to Producer.Produce.
+- Produce throws an exception if used when async serializers are configured.
+- Made AdminClient, Producer, and Consumer classes internal.
+
+
+# 1.0.0-RC4
+
+## Changes
+
+- Removed `SerializationContext` from non-async serde interfaces.
+- Replaced `ISerializer` interface with `Serializer` delegate.
+- Replaced `IDeserializer` interface with `Deserializer` delegate.
+
+
+# 1.0.0-RC3
+
+## New Features
+
+- `Producer.Poll` can now be used with producer instances that are in background polling mode.
+  - Typically use: Block for a minimal period of time following a `ErrorCode.Local_QueueFull` error.
+
+## Changes
+
+- Removed the `Confluent.Kafka.Serdes` namespace.
+
+## Fixes
+
+- Added `CompressionType` property to `ProducerConfig` class.
+
+
 # 1.0.0-RC2
 
 ## New Features
@@ -112,7 +256,7 @@
 - The methods used to produce messages have changed:
   - Methods that accept a callback are now named `BeginProduce` (not `ProduceAsync`), analogous to similar methods in the standard library.
   - Callbacks are now specified as `Action<DeliveryReportResult<TKey, TValue>>` delegates, not implementations of `IDeliveryHandler`.
-  - The `IDeliveryHandler` interface has been depreciated.
+  - The `IDeliveryHandler` interface has been deprecated.
   - There are two variants of `ProduceAsync` and `BeginProduce`, the first takes a topic name and a `Message`. The second takes a `TopicPartition` and a message.
     - i.e. when producing, there is now clear separation between what is produced and where it is produced to.
   - The new API is more future proof.

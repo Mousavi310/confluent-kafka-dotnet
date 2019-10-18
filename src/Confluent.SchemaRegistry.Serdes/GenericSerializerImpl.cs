@@ -21,7 +21,6 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Confluent.Kafka;
-using Confluent.SchemaRegistry;
 using Avro.Generic;
 using Avro.IO;
 
@@ -52,12 +51,12 @@ namespace Confluent.SchemaRegistry.Serdes
 
         /// <summary>
         ///     Serialize GenericRecord instance to a byte array in Avro format. The serialized
-        ///     data is preceeded by a "magic byte" (1 byte) and the id of the schema as registered
+        ///     data is preceded by a "magic byte" (1 byte) and the id of the schema as registered
         ///     in Confluent's Schema Registry (4 bytes, network byte order). This call may block or throw 
         ///     on first use for a particular topic during schema registration.
         /// </summary>
         /// <param name="topic">
-        ///     The topic associated wih the data.
+        ///     The topic associated with the data.
         /// </param>
         /// <param name="data">
         ///     The object to serialize.
@@ -74,7 +73,7 @@ namespace Confluent.SchemaRegistry.Serdes
             {
                 int schemaId;
                 global::Avro.RecordSchema writerSchema;
-                await serializeMutex.WaitAsync();
+                await serializeMutex.WaitAsync().ConfigureAwait(continueOnCapturedContext: false);
                 try
                 {
                     // TODO: If any of these caches fills up, this is probably an
@@ -113,8 +112,8 @@ namespace Confluent.SchemaRegistry.Serdes
                     // better to use hash functions based on the writerSchemaString 
                     // object reference, not value.
                     string subject = isKey
-                        ? schemaRegistryClient.ConstructKeySubjectName(topic)
-                        : schemaRegistryClient.ConstructValueSubjectName(topic);
+                        ? schemaRegistryClient.ConstructKeySubjectName(topic, data.Schema.Fullname)
+                        : schemaRegistryClient.ConstructValueSubjectName(topic, data.Schema.Fullname);
 
                     var subjectSchemaPair = new KeyValuePair<string, string>(subject, writerSchemaString);
                     if (!registeredSchemas.Contains(subjectSchemaPair))
